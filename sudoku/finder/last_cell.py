@@ -1,9 +1,9 @@
 from ..solver.finder import Finder
 
 
-class LastOneFinder(Finder):
+class LastCellFinder(Finder):
     def find(self, board):
-        result = super(LastOneFinder, self).find(board)
+        result = super(LastCellFinder, self).find(board)
 
         for region in board.rows + board.columns + board.areas:
             cells = region.empty_cells
