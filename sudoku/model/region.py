@@ -30,6 +30,17 @@ class Region(Cells):
         numbers -= filled
         return sorted(numbers)
 
+    def crossing_cells(self, other):
+        return other.filter(self.check_crossing)
+
+    def crossing_cell(self, other):
+        cells = self.crossing_cells(other)
+        return cells[0] if cells else None
+
+    def check_crossing(self, cell):
+        return cell in self
+
+
 class Row(Region):
     @property
     def y(self):
@@ -38,6 +49,9 @@ class Row(Region):
     @property
     def is_row(self):
         return True
+
+    def check_crossing(self, cell):
+        return cell.y == self.y
 
 
 class Column(Region):
@@ -49,6 +63,10 @@ class Column(Region):
     def is_column(self):
         return True
 
+    def check_crossing(self, cell):
+        return cell.x == self.x
+
+
 
 class Area(Region):
     @property
@@ -58,5 +76,3 @@ class Area(Region):
     @property
     def y(self):
         return self.identifier[1]
-
-    pass

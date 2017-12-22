@@ -21,3 +21,6 @@ class FinderResult(object):
     def found(self, cell, number):
         self.cell = cell
         self.number = number
+
+    def do_it(self):
+        self.cell.set(self.number)

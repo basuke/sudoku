@@ -8,11 +8,12 @@ class LastNumberFinder(Finder):
         for number in range(1, 10):
             cells = board.which_has(number)
             if len(cells) == (9 - 1):
-                numbers = set(range(1, 10))
-                x = (numbers - set(cell.x for cell in cells)).pop()
-                y = (numbers - set(cell.y for cell in cells)).pop()
+                rows = board.rows.filter(lambda row: not number in row)
+                cols = board.columns.filter(lambda col: not number in col)
 
-                result.found(board.cell(x, y), number)
+                assert len(rows) == 1 and len(cols) == 1
+
+                result.found(rows[0].crossing_cell(cols[0]), number)
                 break
 
         return result

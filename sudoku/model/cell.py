@@ -84,6 +84,11 @@ class Cell(Injectable):
             int((self.x - 1) / 3) + 1,
             int((self.y - 1) / 3) + 1)
 
+    @property
+    def effective_cells(self):
+        from .list import Cells
+        return Cells(self.row + self.column + self.area)
+
     def set(self, number):
         assert self.number is None
         self.number = number

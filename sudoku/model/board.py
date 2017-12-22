@@ -41,6 +41,9 @@ class Board(Cells):
         self.columns = List(gen_column(x) for x in range(1, 10))
         self.areas = List(gen_area(x, y) for y in range(1, 4) for x in range(1, 4))
 
+        self.area_rows = List(List(area for area in self.areas if area.y == i) for i in range(1, 4))
+        self.area_columns = List(List(area for area in self.areas if area.x == i) for i in range(1, 4))
+
         self.analyzers = []
 
     def cell(self, x, y):

@@ -19,6 +19,10 @@ class List(list):
         return item in self
 
     @property
+    def _1st(self):
+        return self[0] if len(self) > 0 else None
+
+    @property
     def class_for_copy(self):
         return List
 
