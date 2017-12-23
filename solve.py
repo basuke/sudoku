@@ -1,22 +1,14 @@
 from sudoku.model import cell, Board
-from sudoku.parser import parse
 from sudoku.solver import Solver
+from sudoku.finder.last_cell import LastCellFinder
+from sudoku.finder.last_number import LastNumberFinder
+from sudoku.finder.aligned_boxes import AlignedBoxesFinder
+from sudoku.finder.each_box import EachBoxFinder
+from sudoku.test.sample import EASY1
 
 boards = [
-    parse("""
-    . 6 . | 1 . 2 | . 3 .
-    7 . 8 | . 6 . | 9 . 2
-    . 1 . | 9 . 8 | . 7 .
-    ------+-------+------
-    2 . 6 | . 4 . | 1 . 3
-    . 9 . | 6 . 7 | . 8 .
-    1 . 4 | . 9 . | 7 . 5
-    ------+-------+------
-    . 2 . | 5 . 1 | . 4 .
-    9 . 5 | . 3 . | 8 . 1
-    . 3 . | 4 . 9 | . 5 .
-    """),
-    parse("""
+    EASY1,
+    """
     8 7 . | . 1 4 | 6 . .
     6 . . | . . 2 | 3 . .
     . . . | . . . | 1 5 8
@@ -28,8 +20,8 @@ boards = [
     5 1 2 | . . . | . . .
     . . 3 | 7 . . | . . 5
     . . 7 | 5 3 . | . 8 9
-    """),
-    parse("""
+    """,
+    """
     . . . | . . . | . 2 3
     1 . 6 | 3 . 7 | . 4 8
     4 . . | . . 1 | . . .
@@ -41,8 +33,8 @@ boards = [
     . . . | 7 . . | . . 5
     7 4 . | 8 . 5 | 3 . 6
     2 9 . | . . . | . . .
-    """),
-    parse("""
+    """,
+    """
     . 1 . | 6 . 3 | . 5 .
     9 . . | . 1 . | . . 4
     . . 8 | . . . | 2 . .
@@ -54,21 +46,11 @@ boards = [
     . . 6 | . . . | 4 . .
     7 . . | . 5 . | . . 2
     . 9 . | 8 . 7 | . 1 .
-    """),
-    parse("""
-    """),
-    parse("""
-    """),
-    parse("""
-    """),
-    parse("""
-    """),
-    parse("""
-    """),
+    """,
 ]
 
 hard4 = [
-    parse("""
+    """
     . 4 . | 1 . . | . . .
     7 . . | . . 9 | . . 8
     . . 6 | . . . | 4 . .
@@ -80,8 +62,8 @@ hard4 = [
     . . 4 | . . . | 3 . .
     9 . . | 7 . . | . . 2
     . . . | . . 4 | . 6 .
-    """),
-    parse("""
+    """,
+    """
     . . 2 | . 1 . | . . 4
     . 8 . | . . . | 5 . .
     5 . . | . . 3 | . 7 .
@@ -93,8 +75,8 @@ hard4 = [
     . 2 . | 5 . . | . . 1
     . . 8 | . . . | . 6 .
     6 . . | . 4 . | 9 . .
-    """),
-    parse("""
+    """,
+    """
     . 6 . | . 4 2 | . . 7
     3 . . | 7 . . | . . .
     . . 8 | . . . | 9 . .
@@ -106,8 +88,8 @@ hard4 = [
     . . 5 | . . . | 4 . .
     . . . | . . 9 | . . 8
     1 . . | 5 6 . | . 9 .
-    """),
-    parse("""
+    """,
+    """
     . 6 . | . . 8 | . . 7
     . . . | . . 2 | 8 . .
     . . 1 | 4 . . | . . .
@@ -119,8 +101,8 @@ hard4 = [
     . . . | . . 5 | 1 . .
     . . 4 | 6 . . | . . .
     3 . . | 2 . . | . 5 .
-    """),
-    parse("""
+    """,
+    """
     . 1 . | . . 6 | . . .
     . . 2 | . . . | 9 4 .
     6 . . | 3 . . | . . 7
@@ -132,8 +114,8 @@ hard4 = [
     9 . . | . . 7 | . . 4
     . 4 1 | . . . | 8 . .
     . . . | 8 . . | . 9 .
-    """),
-    parse("""
+    """,
+    """
     . . . | . 6 . | . 8 1
     . . . | . . . | . . 4
     . 2 9 | . . 5 | . . .
@@ -145,8 +127,8 @@ hard4 = [
     . . . | 5 . . | 2 3 .
     3 . . | . . . | . . .
     8 6 . | . 7 . | . . .
-    """),
-    parse("""
+    """,
+    """
     . . . | . 3 2 | . . .
     . . 6 | . . . | . 4 .
     . 9 . | 7 . . | 3 . 1
@@ -158,8 +140,8 @@ hard4 = [
     4 . 2 | . . 8 | . 6 .
     . 3 . | . . . | 5 . .
     . . . | 6 7 . | . . .
-    """),
-    parse("""
+    """,
+    """
     . . . | . . 3 | 8 . .
     . 7 8 | . . 1 | . . .
     . 3 . | 8 . . | . . 5
@@ -171,8 +153,8 @@ hard4 = [
     3 . . | . . 2 | . 9 .
     . . . | 6 . . | 4 7 .
     . . 5 | 4 . . | . . .
-    """),
-    parse("""
+    """,
+    """
     . . 1 | . 6 . | . 7 5
     . 2 . | . . 7 | . . 6
     3 . . | . . . | 4 . .
@@ -184,38 +166,29 @@ hard4 = [
     . . 8 | . . . | . . 7
     5 . . | 2 . . | . 8 .
     2 3 . | . 7 . | 9 . .
-    """),
-    parse("""
-    """),
-    parse("""
-    """),
-    parse("""
-    """),
+    """,
 ]
 
-def create_solver(board):
-    """create and setup step finders"""
-    solver = Solver(board)
 
-    # solver.addFinder(LastOneCellInGroupFinder())
-    # solver.addFinder(LastOneInTheNumberFinder())
-    # solver.addFinder(TwoAlignedAreasWithSameNumberFinder())
-    # solver.addFinder(EachAreaFinder())
-    # solver.addFinder(EachAreaFinder2())
-    # solver.addFinder(RowOrColumnOnlyOneCellFinder())
-    #solver.addFinder(ManualFinder())
-    return solver
+for numbers in boards + hard4:
+    board = Board(numbers)
+    solver = Solver(board, [
+        LastCellFinder(),
+        LastNumberFinder(),
+        AlignedBoxesFinder(),
+        EachBoxFinder(),
+        AlignedBoxesFinder(extra=True),
+    ])
 
-
-for cells in [cells for cells in boards + hard4 if cells]:
-    board = Board(cells)
-    solver = create_solver(board)
-
-    print board
-    while solver.step():
-        pass
-    print solver
-    print
+    solver.solve()
 
     if not board.is_complete:
+        print Board(numbers)
+
+        for result in solver.steps:
+            print result
+
+        print board
         break
+
+    print

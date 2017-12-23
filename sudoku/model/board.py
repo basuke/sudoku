@@ -1,6 +1,7 @@
+from sudoku.stringify import stringify_board
 from .cell import Cell
 from .list import Cells, List
-from .region import Row, Column, Area
+from .region import Row, Column, Box
 from ..parser import parse
 
 
@@ -22,29 +23,30 @@ class Board(Cells):
         def gen_column(x):
             return Column(x, self.filter(lambda cell: cell.x == x), self)
 
-        def gen_area(x, y):
+        def gen_box(x, y):
             max_x = x * 3
             min_x = max_x - 3 + 1
             max_y = y * 3
             min_y = max_y - 3 + 1
 
-            def in_area(cell):
+            def in_box(cell):
                 return min_x <= cell.x <= max_x and min_y <= cell.y <= max_y
 
-            return Area(
+            return Box(
                 (x, y),
-                self.filter(lambda cell: in_area(cell)),
+                self.filter(lambda cell: in_box(cell)),
                 self
             )
 
         self.rows = List(gen_row(y) for y in range(1, 10))
         self.columns = List(gen_column(x) for x in range(1, 10))
-        self.areas = List(gen_area(x, y) for y in range(1, 4) for x in range(1, 4))
+        self.boxes = List(gen_box(x, y) for y in range(1, 4) for x in range(1, 4))
 
-        self.area_rows = List(List(area for area in self.areas if area.y == i) for i in range(1, 4))
-        self.area_columns = List(List(area for area in self.areas if area.x == i) for i in range(1, 4))
+        self.box_rows = List(List(box for box in self.boxes if box.y == i) for i in range(1, 4))
+        self.box_columns = List(List(box for box in self.boxes if box.x == i) for i in range(1, 4))
 
         self.analyzers = []
+        self.constraints = []
 
     def cell(self, x, y):
         return self[(y - 1) * 9 + (x - 1)]
@@ -55,8 +57,8 @@ class Board(Cells):
     def column(self, x):
         return self.columns[x - 1]
 
-    def area(self, x, y):
-        return self.areas[(y - 1) * 3 + (x - 1)]
+    def box(self, x, y):
+        return self.boxes[(y - 1) * 3 + (x - 1)]
 
     @property
     def is_finished(self):
@@ -81,12 +83,14 @@ class Board(Cells):
         return [(region, cells) for region, cells in self.find_invalid_regions_and_cells()]
 
     def find_invalid_regions_and_cells(self):
-        for region in self.rows + self.columns + self.areas:
+        for region in self.rows + self.columns + self.boxes:
             cells = region.invalid_cells
             if cells:
                 yield (region, cells)
 
     def analyze(self):
+        self.constraints = []
+
         for analyzer in self.analyzers:
             analyzer.analyze(self)
 
@@ -98,4 +102,13 @@ class Board(Cells):
             analyzer.will_bind(self)
             self.analyzers.append(analyzer)
             return analyzer
+
+    def add_constraint(self, constraint):
+        self.constraints.append(constraint)
+
+    def __str__(self):
+        return stringify_board(self, detail=True)
+
+    def __repr__(self):
+        return stringify_board(self, detail=True)
 

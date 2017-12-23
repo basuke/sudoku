@@ -2,6 +2,10 @@ from ..solver.finder import Finder
 
 
 class LastNumberFinder(Finder):
+    """
+    If some specific numbers are used for 8 times, the last one
+    to be placed will be easily figured out.
+    """
     def find(self, board):
         result = super(LastNumberFinder, self).find(board)
 

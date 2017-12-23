@@ -24,3 +24,6 @@ class FinderResult(object):
 
     def do_it(self):
         self.cell.set(self.number)
+
+    def __str__(self):
+        return "%s => (%d, %d) : %s" % (self.number, self.cell.x, self.cell.y, self.finder)

@@ -16,7 +16,7 @@ class TestBoard(unittest.TestCase):
         board = Board(sample.EASY1)
 
         self.assertEqual(5, board.row(5).y)
-        self.assertEqual((2, 3), board.area(2, 3).identifier)
+        self.assertEqual((2, 3), board.box(2, 3).identifier)
         self.assertEqual(3, board.column(3).x)
 
     def test_finished(self):

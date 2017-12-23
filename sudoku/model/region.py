@@ -3,7 +3,7 @@ from .list import List, Cells
 
 class Region(Cells):
     """
-    Base class for Row, Column and Area. Implements common features.
+    Base class for Row, Column and Box. Implements common features.
     """
     def __init__(self, identifier, cells, board=None):
         super(Region, self).__init__(cells)
@@ -67,8 +67,7 @@ class Column(Region):
         return cell.x == self.x
 
 
-
-class Area(Region):
+class Box(Region):
     @property
     def x(self):
         return self.identifier[0]

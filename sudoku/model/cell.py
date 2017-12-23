@@ -75,19 +75,22 @@ class Cell(Injectable):
         return self.board.column(self.x)
 
     @property
-    def area(self):
-        """area that the cell belongs to"""
+    def box(self):
+        """box that the cell belongs to"""
         if not self.board:
             raise ReferenceError("this cell is not bound to any board")
 
-        return self.board.area(
+        return self.board.box(
             int((self.x - 1) / 3) + 1,
             int((self.y - 1) / 3) + 1)
 
     @property
     def effective_cells(self):
         from .list import Cells
-        return Cells(self.row + self.column + self.area)
+        return Cells(self.row + self.column + self.box)
+
+    def can_be(self, number):
+        return number not in self.row and number not in self.column and number not in self.box
 
     def set(self, number):
         assert self.number is None

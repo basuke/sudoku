@@ -59,7 +59,6 @@ class TestAnalyzer(unittest.TestCase):
         self.assertEqual("Happy 3, 1", cell.is_happy)
         self.assertEqual(True, cell.is_number(2))
 
-
 @property
 def cell__is_happy(cell):
     return "Happy %s, %s" % cell.position

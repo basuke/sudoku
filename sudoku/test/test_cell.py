@@ -71,24 +71,24 @@ class TestCell(TestCase):
         cell = Cell(5, 4, board=board)
         self.assertEqual("row 4", cell.row)
         self.assertEqual("column 5", cell.column)
-        self.assertEqual("area 2, 2", cell.area)
+        self.assertEqual("box 2, 2", cell.box)
 
         cell = Cell(1, 1, board=board)
         self.assertEqual("row 1", cell.row)
         self.assertEqual("column 1", cell.column)
-        self.assertEqual("area 1, 1", cell.area)
+        self.assertEqual("box 1, 1", cell.box)
 
         cell = Cell(9, 9, board=board)
         self.assertEqual("row 9", cell.row)
         self.assertEqual("column 9", cell.column)
-        self.assertEqual("area 3, 3", cell.area)
+        self.assertEqual("box 3, 3", cell.box)
 
     def test_board_related_exceptions(self):
         cell = Cell(1, 1)
 
         self.assertRaises(ReferenceError, lambda: cell.row)
         self.assertRaises(ReferenceError, lambda: cell.column)
-        self.assertRaises(ReferenceError, lambda: cell.area)
+        self.assertRaises(ReferenceError, lambda: cell.box)
 
 
 class MockBoard(object):
@@ -98,5 +98,5 @@ class MockBoard(object):
     def column(self, y):
         return "column %d" % y
 
-    def area(self, x, y):
-        return "area %d, %d" % (x, y)
+    def box(self, x, y):
+        return "box %d, %d" % (x, y)

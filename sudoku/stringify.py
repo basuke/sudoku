@@ -21,8 +21,16 @@ def stringify_list(a_list, detail=False):
     return s + ')'
 
 
-def stringify_board(board):
+def stringify_board(board, detail=False):
     lines = []
+
+    if detail:
+        lines += ["%d / %d filled" % (len(board.filled_cells), len(board))]
+        lines += ["is_complete? %s" % board.is_complete]
+        lines += ["is_finished? %s" % board.is_finished]
+        lines += ["is_valid? %s" % board.is_valid]
+        lines += [" / ".join("%d (%d)" % (num, len(board.which_has(num))) for num in range(1, 10))]
+
     for row in board.rows:
         line = ""
 

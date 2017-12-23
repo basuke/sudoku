@@ -2,7 +2,7 @@ import unittest
 
 from sudoku.finder.last_cell import LastCellFinder
 from sudoku.finder.last_number import LastNumberFinder
-from sudoku.finder.aligned_areas import AlignedAreasFinder
+from sudoku.finder.aligned_boxes import AlignedBoxesFinder
 from sudoku.model.board import Board
 from sudoku.solver import Solver
 
@@ -80,8 +80,8 @@ class TestFinder(unittest.TestCase):
         self.assertEqual((6, 6), result.cell.position)
         self.assertEqual(1, result.number)
 
-    def test_aligned_areas(self):
-        finder = AlignedAreasFinder()
+    def test_aligned_boxes(self):
+        finder = AlignedBoxesFinder()
         board = Board("""
             2 1 4 | 6 9 3 | 7 5 8
             9 5 7 | . 1 8 | 3 6 4
