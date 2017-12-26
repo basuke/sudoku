@@ -1,5 +1,6 @@
 from sudoku.stringify import stringify_board, stringify_cell
 
+
 injected = []
 
 
@@ -29,22 +30,22 @@ class Cell(Injectable):
         if self.__class__ != other.__class__:
             return False
 
-        return self._sort_key == other._sort_key
+        return self.sort_key == other.sort_key
 
     def __ne__(self, other):
         return not self.__eq__(other)
 
     def __gt__(self, other):
-        return self._sort_key > other._sort_key
+        return self.sort_key > other.sort_key
 
     def __ge__(self, other):
-        return self._sort_key >= other._sort_key
+        return self.sort_key >= other.sort_key
 
     def __le(self, other):
-        return self._sort_key <= other._sort_key
+        return self.sort_key <= other.sort_key
 
     def __lt__(self, other):
-        return self._sort_key < other._sort_key
+        return self.sort_key < other.sort_key
 
     def __nonzero__(self):
         return self.number is not None
@@ -92,6 +93,21 @@ class Cell(Injectable):
     def can_be(self, number):
         return number not in self.row and number not in self.column and number not in self.box
 
+    @property
+    def available_numbers(self):
+        if self.number:
+            return {}
+
+        numbers = set(n for n in range(1, 10) if self.can_be(n))
+
+        for c in self.board.constraints:
+            if self in c:
+                numbers &= c.numbers
+            elif c in self.row or c in self.column or c in self.box:
+                numbers  -= c.numbers
+
+        return numbers
+
     def set(self, number):
         assert self.number is None
         self.number = number
@@ -106,7 +122,5 @@ class Cell(Injectable):
         return self.position[1]
 
     @property
-    def _sort_key(self):
-        return (self.y, self.x, self.number)
-
-
+    def sort_key(self):
+        return self.y, self.x, self.number

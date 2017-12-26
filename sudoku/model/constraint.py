@@ -4,7 +4,7 @@ from .list import Cells
 class Constraint(Cells):
     def __init__(self, cells, numbers):
         super(Constraint, self).__init__(cells)
-        self.numbers = numbers
+        self.numbers = set(numbers)
 
         assert len(self) == len(self.numbers)
 

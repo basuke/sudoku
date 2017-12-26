@@ -6,7 +6,9 @@ from sudoku.model.cell import Cell
 def cell(x, y, number=None):
     return Cell(x, y, number)
 
+
 cell1, cell2, cell3 = cell(1,1,9), cell(2,1), cell(3,1)
+
 
 class TestList(TestCase):
     def test_equal(self):
@@ -52,6 +54,17 @@ class TestList(TestCase):
         self.assertIsInstance(l1 & l2, List)
         self.assertIsInstance(l1 | l2, List)
         self.assertIsInstance(l1 - l2, List)
+
+    def test_subset(self):
+        l1 = List([1, 2, 3, 4, 5, 6])
+
+        self.assertTrue(List([1, 2, 3]) in l1)
+        self.assertTrue(List([]) in l1)
+        self.assertTrue(l1 in l1)
+        self.assertTrue(List([6]) in l1)
+
+        self.assertFalse(List([8]) in l1)
+        self.assertFalse(List([1, 2, 7]) in l1)
 
     def test_cells(self):
         self.assertEqual([], List([1, 2, 3]).cells)

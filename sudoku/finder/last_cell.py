@@ -15,7 +15,7 @@ class LastCellFinder(Finder):
             cells = region.empty_cells
             if len(cells) == 1:
                 numbers = region.available_numbers
-                result.found(cells[0], numbers[0])
+                result.found(cells.pop(), numbers.pop())
                 break
 
         return result

@@ -51,6 +51,12 @@ class Board(Cells):
     def cell(self, x, y):
         return self[(y - 1) * 9 + (x - 1)]
 
+    def cells(self, *cells):
+        if not cells:
+            return self
+
+        return Cells(self.cell(*position) for position in cells)
+
     def row(self, y):
         return self.rows[y - 1]
 

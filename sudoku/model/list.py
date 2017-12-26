@@ -44,6 +44,15 @@ class List(list):
     def __sub__(self, other):
         return self.copy(sorted(set(self) - set(other)))
 
+    def __contains__(self, item):
+        if super(List, self).__contains__(item):
+            return True
+
+        try:
+            return set(self).issuperset(set(item))
+        except TypeError:
+            return False
+
     @property
     def cells(self):
         """all cells recursively"""
@@ -76,14 +85,14 @@ class List(list):
 
 
 class Cells(List):
-    def __init__(self, *cells):
+    @classmethod
+    def make(cls, *cells):
         if len(cells) == 1 and type(cells[0]) == tuple:
             cells = [[Cell(*cells[0])]]
         elif len(cells) > 1:
             cells = [(Cell(*cell) if type(cell) == tuple else cell for cell in cells)]
 
-        super(Cells, self).__init__(*cells)
-        assert self.all(lambda cell: type(cell) == Cell)
+        return cls(*cells)
 
     @property
     def class_for_copy(self):

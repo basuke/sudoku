@@ -28,7 +28,7 @@ class Region(Cells):
         numbers = set(range(1, 10))
         filled = set(cell.number for cell in self.filled_cells)
         numbers -= filled
-        return sorted(numbers)
+        return numbers
 
     def crossing_cells(self, other):
         return other.filter(self.check_crossing)
@@ -75,3 +75,14 @@ class Box(Region):
     @property
     def y(self):
         return self.identifier[1]
+
+    def cell(self, x, y):
+        return self[(y - 1) * 3 + (x - 1)]
+
+    @property
+    def rows(self):
+        return [self.cell(1, y).row for y in range(1, 4)]
+
+    @property
+    def columns(self):
+        return [self.cell(x, 1).row for x in range(1, 4)]
