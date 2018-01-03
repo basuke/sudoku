@@ -4,6 +4,8 @@ from sudoku.finder.last_cell import LastCellFinder
 from sudoku.finder.last_number import LastNumberFinder
 from sudoku.finder.aligned_boxes import AlignedBoxesFinder
 from sudoku.finder.each_box import EachBoxFinder
+from sudoku.finder.one_choice import OneChoiceFinder
+from sudoku.finder.constraint import ConstraintFinder
 from sudoku.test.sample import EASY1
 
 boards = [
@@ -169,26 +171,35 @@ hard4 = [
     """,
 ]
 
+finders = [
+    LastCellFinder(),
+    LastNumberFinder(),
+    AlignedBoxesFinder(),
+    EachBoxFinder(),
+    AlignedBoxesFinder(extra=True),
+    OneChoiceFinder(),
+    ConstraintFinder(),
+    EachBoxFinder(),
+    AlignedBoxesFinder(extra=True),
+    OneChoiceFinder(),
+]
 
-for numbers in boards + hard4:
+verbose = True
+
+for numbers in hard4:
     board = Board(numbers)
-    solver = Solver(board, [
-        LastCellFinder(),
-        LastNumberFinder(),
-        AlignedBoxesFinder(),
-        EachBoxFinder(),
-        AlignedBoxesFinder(extra=True),
-    ])
+    solver = Solver(board, finders)
 
-    solver.solve()
+    solver.solve(verbose=verbose)
 
     if not board.is_complete:
-        print Board(numbers)
+        if not verbose:
+            print Board(numbers)
 
-        for result in solver.steps:
-            print result
+            for result in solver.steps:
+                print result
 
-        print board
+            print board
         break
 
     print

@@ -11,20 +11,28 @@ class Solver(object):
     def is_solving(self):
         return not self.board.is_finished and self.board.is_valid
 
-    def step(self):
+    def step(self, verbose=False):
+        self.board.constraints.clear()
+
         for finder in self.finders:
             finder.prepare(self.board)
 
             result = finder.find(self.board)
             if result:
                 result.cell.set(result.number)
+                if verbose:
+                    print self.board
+                    print " >", result
                 return result
+
+        if verbose:
+            print self.board
 
         return None
 
-    def solve(self):
+    def solve(self, verbose=False):
         while self.is_solving:
-            found = self.step()
+            found = self.step(verbose)
             if not found:
                 return False
 

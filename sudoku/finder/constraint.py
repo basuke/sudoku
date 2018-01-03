@@ -4,15 +4,18 @@ from ..model.constraint import Constraint
 
 class ConstraintFinder(Finder):
     def find(self, board):
+        self.found = []
+
         for box in board.boxes:
-            for constraint in self.find_constraint(box):
-                board.add_constraint(constraint)
+            self.find_box_constraint(box)
 
-    def find_constraint(self, box):
+        for cells, number in self.found:
+            board.add_constraint(cells, number)
+
+    def find_box_constraint(self, box):
         numbers = box.available_numbers
-        cells = box.empty_cells
 
-        if len(numbers) == 2:
-            yield Constraint(cells, numbers)
-        elif len(numbers) > 2:
-            pass
+        for number in numbers:
+            cells = box.possible_cells_with(number)
+            if len(cells) == 2 and cells.is_aligned:
+                self.found.append((cells, number))

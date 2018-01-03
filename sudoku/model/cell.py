@@ -101,10 +101,10 @@ class Cell(Injectable):
         numbers = set(n for n in range(1, 10) if self.can_be(n))
 
         for c in self.board.constraints:
-            if self in c:
+            if self in c and c.is_complete:
                 numbers &= c.numbers
-            elif c in self.row or c in self.column or c in self.box:
-                numbers  -= c.numbers
+            elif len(c) > 1 and (c in self.row or c in self.column or c in self.box):
+                numbers -= c.numbers
 
         return numbers
 

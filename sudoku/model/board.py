@@ -1,3 +1,4 @@
+from sudoku.model.constraint import Constraint
 from sudoku.stringify import stringify_board
 from .cell import Cell
 from .list import Cells, List
@@ -46,7 +47,7 @@ class Board(Cells):
         self.box_columns = List(List(box for box in self.boxes if box.x == i) for i in range(1, 4))
 
         self.analyzers = []
-        self.constraints = []
+        self.constraints = List([])
 
     def cell(self, x, y):
         return self[(y - 1) * 9 + (x - 1)]
@@ -109,8 +110,20 @@ class Board(Cells):
             self.analyzers.append(analyzer)
             return analyzer
 
-    def add_constraint(self, constraint):
-        self.constraints.append(constraint)
+    def add_constraint(self, cells, number):
+        constraint = self.find_constraint(cells)
+        if not constraint:
+            constraint = Constraint(cells)
+            self.constraints.append(constraint)
+
+        constraint.add_number(number)
+
+    def find_constraint(self, cells):
+        for constraint in self.constraints:
+            if constraint == cells:
+                return constraint
+
+        return None
 
     def __str__(self):
         return stringify_board(self, detail=True)

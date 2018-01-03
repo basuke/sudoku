@@ -30,6 +30,12 @@ class Region(Cells):
         numbers -= filled
         return numbers
 
+    def possible_cells_with(self, number):
+        if self.which_has(number):
+            return Cells()
+
+        return self.empty_cells.filter(lambda cell: number in cell.available_numbers)
+
     def crossing_cells(self, other):
         return other.filter(self.check_crossing)
 

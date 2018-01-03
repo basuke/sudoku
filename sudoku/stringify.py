@@ -10,8 +10,10 @@ def stringify_cell(cell, detail=False):
 
 def stringify_list(a_list, detail=False):
     s = a_list.__class__.__name__ + '('
-    if hasattr(a_list, 'identifier'):
-        s += '#%s, ' % a_list.identifier
+    # if hasattr(a_list, 'identifier'):
+    #     id = getattr(a_list, 'identifier')
+    #
+    #     s += '#%s, ' % str(a_list.identifier)
 
     if detail:
         s += str(list(a_list))
@@ -30,6 +32,11 @@ def stringify_board(board, detail=False):
         lines += ["is_finished? %s" % board.is_finished]
         lines += ["is_valid? %s" % board.is_valid]
         lines += [" / ".join("%d (%d)" % (num, len(board.which_has(num))) for num in range(1, 10))]
+
+        if board.constraints:
+            lines += ["constraints:"]
+            for constraint in board.constraints:
+                lines += ["  %s" % repr(constraint)]
 
     for row in board.rows:
         line = ""

@@ -15,6 +15,9 @@ class List(list):
     def is_column(self):
         return False
 
+    def clear(self):
+        self[:] = []
+
     def contains(self, item):
         return item in self
 
@@ -128,4 +131,6 @@ class Cells(List):
             return False
         return self.all(lambda c: c.x == self[0].x)
 
-
+    @property
+    def is_aligned(self):
+        return self.is_aligned_y or self.is_aligned_x
