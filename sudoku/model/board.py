@@ -5,10 +5,9 @@ from .list import Cells, List
 from .region import Row, Column, Box
 from ..parser import parse
 
-
 class Board(Cells):
-    def __init__(self, numbers_str=""):
-        numbers = list(parse(numbers_str))
+    def __init__(self, str_or_list=""):
+        numbers = list(parse(str_or_list) if hasattr(str_or_list, 'split') else str_or_list)
 
         def gen_cells():
             for y in range(1, 10):
@@ -48,6 +47,15 @@ class Board(Cells):
 
         self.analyzers = []
         self.constraints = List([])
+
+    def __copy__(self):
+        numbers = [cell.number for cell in self]
+
+        board = Board(numbers)
+        board.analyzers = self.analyzers[:]
+        board.constraints = List(self.constraints[:])
+
+        return board
 
     def cell(self, x, y):
         return self[(y - 1) * 9 + (x - 1)]

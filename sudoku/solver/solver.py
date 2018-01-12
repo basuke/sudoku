@@ -1,4 +1,5 @@
 from .finder import FinderResult
+from copy import copy
 
 
 class Solver(object):
@@ -6,6 +7,7 @@ class Solver(object):
         self.board = board
         self.finders = finders or []
         self.steps = []
+        self.boards = []
 
     @property
     def is_solving(self):
@@ -39,3 +41,16 @@ class Solver(object):
             self.steps.append(found)
 
         return self.board.is_finished
+
+    def save(self, comment=""):
+        self.boards.append((copy(self.board), comment))
+
+    def restore(self):
+        if self.boards:
+            self.board, comment = self.boards.pop()
+            return comment
+        else:
+            return None
+
+    def saved_boards(self):
+        return self.boards
